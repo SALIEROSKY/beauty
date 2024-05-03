@@ -1,2 +1,0 @@
-# beauty
-Proyecto Talento tech

@@ -55,6 +55,12 @@ function logout() {
     });
 }
 
+// Función para verificar si el usuario está logeado
+function isLoggedIn() {
+    const username = localStorage.getItem('username');
+    return !!username; // Si el nombre de usuario existe, devuelve true; de lo contrario, devuelve false.
+}
+
 // Asignar funciones a los eventos del formulario de inicio de sesión y el botón de cierre de sesión
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.querySelector('#loginForm');
