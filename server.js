@@ -8,6 +8,7 @@ const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 // Importa el módulo path para manejar rutas de archivos y directorios
 const path = require('path');
+const { error } = require('console');
 
 // Crea una instancia de la aplicación Express
 const app = express();
@@ -42,42 +43,37 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Define la ruta para la página de inicio de sesión
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
-});
-
 // Manejar solicitudes GET para '/login.html'
 app.get('/login.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
+    res.sendFile(path.join(__dirname, '/login/login.html'));
 });
-
 
 // Maneja las solicitudes POST para iniciar sesión
 app.post('/login', (req, res) => {
-    const { correo, contraseña } = req.body;
+    const {email, password} = req.body;
     const query = 'SELECT * FROM usuario WHERE CorreoElectronico = ?';
 
     // Realiza una consulta a la base de datos para obtener el usuario con el correo electrónico proporcionado
-    db.query(query, [correo], (err, result) => {
+    db.query(query, [email], (err, result) => {
         if (err) {
-            throw err;
+            console.error('Error en consulta',err);
+            return res.status(500).json({error:'Error interno del servidor'});
         }
         // Verifica si se encontró un usuario con el correo electrónico proporcionado
         if (result.length > 0) {
-            const storedPassword = result[0].contraseña;
+            const storedPassword = result[0].Clave;
             // Compara la contraseña proporcionada con la contraseña almacenada
-            if (contraseña === storedPassword) {
+            if (password === storedPassword) {
                 console.log("Inicio de sesión exitoso");
                 // Redirige al usuario a la página de inicio después del inicio de sesión exitoso
-                res.redirect('/inicio');
+                res.redirect('/inicio.html');
             } else {
                 // Si las contraseñas no coinciden, devuelve un objeto JSON con exists: false
-                res.json({ exists: false });
+                res.json({ exists_clave: false });
             }
         } else {
             // Si no se encuentra ningún usuario, devuelve un objeto JSON con exists: false
-            res.json({ exists: false });
+            res.json({ exists_usuario: false });
         }
     });
 });
