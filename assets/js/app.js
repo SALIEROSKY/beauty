@@ -44,14 +44,14 @@ function ready(){
 //Eliminamos todos los elementos del carrito y lo ocultamos
 
 function pagarClicked(){
-    if (!isLoggedIn()) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Debes iniciar sesión para realizar la compra.',
-        });
-        return;
-    }
+    // if (!isLoggedIn()) {
+    //     Swal.fire({
+    //         icon: 'error',
+    //         title: 'Error',
+    //         text: 'Debes iniciar sesión para realizar la compra.',
+    //     });
+    //     return;
+    // }
 
     // Mensaje de confirmación antes de finalizar la compra.
     Swal.fire({
@@ -87,14 +87,14 @@ function pagarClicked(){
 
 //Funciòn que controla el boton clickeado de agregar al carrito
 function agregarAlCarritoClicked(event){
-    if (!isLoggedIn()) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Debes iniciar sesión para agregar productos al carrito.',
-        });
-        return;
-    }
+    // if (!isLoggedIn()) {
+    //     Swal.fire({
+    //         icon: 'error',
+    //         title: 'Error',
+    //         text: 'Debes iniciar sesión para agregar productos al carrito.',
+    //     });
+    //     return;
+    // }
 
     let button = event.target;
     let item = button.parentElement;

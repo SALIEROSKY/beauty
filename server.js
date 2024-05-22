@@ -1,21 +1,12 @@
-// Importa el framework Express
 const express = require('express');
-// Importa el middleware bodyParser para analizar datos de solicitud en formato JSON
 const bodyParser = require('body-parser');
-// Importa el módulo MySQL para interactuar con la base de datos MySQL
 const mysql = require('mysql');
-// Importa la biblioteca bcrypt para el cifrado de contraseñas
 const bcrypt = require('bcrypt');
-// Importa el módulo path para manejar rutas de archivos y directorios
 const path = require('path');
-const { error } = require('console');
-
-// Crea una instancia de la aplicación Express
+const session = require('express-session');
 const app = express();
-// Establece el puerto en el que el servidor escuchará las solicitudes
-const port = 3000;
+const port = 3400;
 
-// Crea una conexión a la base de datos MySQL
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -23,7 +14,6 @@ const db = mysql.createConnection({
     database: 'beauty_cosmeticos'
 });
 
-// Establece la conexión a la base de datos MySQL
 db.connect((err) => {
     if (err) {
         throw err;
@@ -31,73 +21,121 @@ db.connect((err) => {
     console.log('Conexión a la base de datos establecida');
 });
 
-// Configura el middleware bodyParser para analizar datos de solicitud codificados en URL
 app.use(bodyParser.urlencoded({ extended: true }));
-// Configura Express para servir archivos estáticos desde el directorio 'public'
-const publicPath = path.join(__dirname, '\beauty');
-app.use(express.static(publicPath));
+app.use(bodyParser.json()); // Asegura que el servidor pueda manejar JSON
+app.use(session({
+    secret: 'secret', // Cambia esto por una cadena secreta segura
+    resave: false,
+    saveUninitialized: true
+}));
 
+// Servir archivos estáticos de las carpetas 'beauty' y 'assets'
+app.use(express.static(path.join(__dirname, 'beauty')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
-// Define la ruta para la página de inicio
+// Ruta para la página principal
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Manejar solicitudes GET para '/login.html'
-app.get('/login.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/login/login.html'));
+// Ruta para la página 'nosotros.html'
+app.get('/nosotros.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'nosotros.html'));
 });
 
-// Maneja las solicitudes POST para iniciar sesión
-app.post('/login', (req, res) => {
-    const {email, password} = req.body;
-    const query = 'SELECT * FROM usuario WHERE CorreoElectronico = ?';
+// Ruta para la página 'login.html'
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login', 'login.html'));
+});
 
-    // Realiza una consulta a la base de datos para obtener el usuario con el correo electrónico proporcionado
+// Ruta para la página 'register.html'
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'register', 'signup.html'));
+});
+
+// Manejar la autenticación de inicio de sesión
+app.post('/login', (req, res) => {
+    const { email, clave } = req.body;
+    const query = 'SELECT * FROM usuario WHERE CorreoElectronico = ?';
     db.query(query, [email], (err, result) => {
         if (err) {
-            console.error('Error en consulta',err);
-            return res.status(500).json({error:'Error interno del servidor'});
+            return res.status(500).json({ error: 'Error en el servidor' });
         }
-        // Verifica si se encontró un usuario con el correo electrónico proporcionado
         if (result.length > 0) {
-            const storedPassword = result[0].Clave;
-            // Compara la contraseña proporcionada con la contraseña almacenada
-            if (password === storedPassword) {
-                console.log("Inicio de sesión exitoso");
-                // Redirige al usuario a la página de inicio después del inicio de sesión exitoso
-                res.redirect('/inicio.html');
-            } else {
-                // Si las contraseñas no coinciden, devuelve un objeto JSON con exists: false
-                res.json({ exists_clave: false });
-            }
+            const hashedPassword = result[0].Clave; // Cambia esto si el nombre de la columna es diferente
+            bcrypt.compare(clave, hashedPassword, (err, bcryptResult) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Error en el servidor' });
+                }
+                if (bcryptResult) {
+                    req.session.user = result[0];
+                    res.json({ exists: true });
+                } else {
+                    res.json({ exists: false });
+                }
+            });
         } else {
-            // Si no se encuentra ningún usuario, devuelve un objeto JSON con exists: false
-            res.json({ exists_usuario: false });
+            res.json({ exists: false });
         }
     });
 });
 
+// Manejar las solicitudes POST para registrar un nuevo usuario
+app.post('/register', (req, res) => {
+    const { nombre, email, clave } = req.body;
+    const saltRounds = 10;
+    const insertUserQuery = 'INSERT INTO usuario (Nombre, CorreoElectronico, Clave) VALUES (?, ?, ?)';
 
-
-// Definir la ruta para la página de inicio después de loguearse
-app.get('/inicio',(req, res) => {
-    // Aquí especificamos que nos redirija al archivo home.html
-    res.sendFile(path.join(__dirname, 'inicio.html'));
+    const checkEmailQuery = 'SELECT * FROM usuario WHERE CorreoElectronico = ?';
+    db.query(checkEmailQuery, [email], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+        if (result.length > 0) {
+            return res.status(400).json({ error: 'El correo electrónico ya está en uso' });
+        }
+        bcrypt.hash(clave, saltRounds, (err, hashedPassword) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+            db.query(insertUserQuery, [nombre, email, hashedPassword], (err, result) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Error en el servidor' });
+                }
+                res.json({ registered: true });
+            });
+        });
+    });
 });
 
-// Manejar solicitudes GET para '/inicio.html'
-app.get('/inicio.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'inicio.html'));
+// Ruta para la página 'inicio.html'
+app.get('/inicio', (req, res) => { // Asegúrate de que la ruta esté bien definida
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'inicio', 'inicio.html'));
+    } else {
+        res.redirect('/login');
+    }
 });
 
-//Definir la ruta para el cierre de sesión
+// Ruta para la página 'carrito.html'
+app.get('/carrito.html', (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'carrito.html'));
+    } else {
+        res.redirect('/login');
+    }
+});
+
+// Manejar el cierre de sesión
 app.get('/logout', (req, res) => {
-    // Cuando el usuario cierre sesión , lo tiene que redirigir al login.html
-    res.redirect('/login');
+    req.session.destroy((err) => {
+        if (err) {
+            return console.error(err);
+        }
+        res.redirect('/login');
+    });
 });
 
-// Especificamos en la consola que el servidor y el puerto estén corriendo
 app.listen(port, () => {
     console.log(`Servidor escuchando en http://localhost:${port}`);
 });
