@@ -26,10 +26,49 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <title>Login</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 90px; /* Ajusta esta altura según sea necesario */
+        }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .gradient-form {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eee;
+            margin-top: 90px; /* Debe ser igual a la altura del header */
+        }
+        .container-fluid {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        footer {
+            background-color: rgb(0, 0, 0);
+            color: #ff69b4;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
                     <img src="/assets/img/logo.webp" alt="Logo" width="170" height="90" class="d-inline-block align-text-top">
@@ -59,7 +98,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/carrito.html" style="color: #ff69b4;">
-                                <i class="fas fa-shopping-cart"></i> Carrito
+                                <i class="fas fa-shopping-cart"></i> Catalogo
                             </a>
                         </li>
                     </ul>
@@ -67,58 +106,67 @@
             </div>
         </nav>
     </header>
-    <section class="h-100 gradient-form" style="background-color: #eee; padding-top: 100px;">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-xl-10">
-                    <div class="card rounded-3 text-black">
-                        <div class="row g-0">
-                            <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                                <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                                    <img src="/assets/img/logow.webp" alt="logo" class="img-fluid mb-4">
-                                    <br>
-                                    <h4 class="mb-4">Nuestra Compañia</h4>
-                                    <p class="small mb-0">Empieza con pie firme, constante y perseverante, 
-                                        emprender no es un fin sino un camino, un camino lleno de espigas y 
-                                        flores en donde debes adoptar una mente proactiva, creativa, receptiva
-                                        y abierta a los cambios que el mundo va mostrando constantemente. Debes
-                                        desarrollar pasión y un profundo sentimiento de pertenencia por tu idea de
-                                        negocio o empresa. No la subestimes, lucha día a día por tus sueños.</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="card-body p-md-5 mx-md-4">
-                                    <div class="text-center">
-                                        <img src="/assets/img/logo.webp" style="width: 185px;" alt="logo">
-                                        <h4 class="mt-1 mb-5 pb-1">Beauty</h4>
+    <main>
+        <section class="h-100 gradient-form padding-top: 100px;">
+            <style> 
+                .gradient-form {
+                    background-image: url(https://png.pngtree.com/background/20230425/original/pngtree-various-cosmetics-products-on-the-background-of-a-colorful-surface-picture-image_2478394.jpg);
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-attachment: fixed;
+                }
+            </style>
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-xl-10">
+                        <div class="card rounded-3 text-black">
+                            <div class="row g-0">
+                                <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                                    <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                                        <img src="/assets/img/logow.webp" alt="logo" class="img-fluid mb-4">
+                                        <br>
+                                        <h4 class="mb-4">Nuestra Compañia</h4>
+                                        <p class="small mb-0">Empieza con pie firme, constante y perseverante, 
+                                            emprender no es un fin sino un camino, un camino lleno de espigas y 
+                                            flores en donde debes adoptar una mente proactiva, creativa, receptiva
+                                            y abierta a los cambios que el mundo va mostrando constantemente. Debes
+                                            desarrollar pasión y un profundo sentimiento de pertenencia por tu idea de
+                                            negocio o empresa. No la subestimes, lucha día a día por tus sueños.</p>
                                     </div>
-                                    <form id="loginForm">
-                                        <div data-mdb-input-init class="form-outline mb-4">
-                                            <label for="email">Correo</label> 
-                                            <input type="email" id="email" class="form-control" placeholder="Email" required/>
-                                          
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card-body p-md-5 mx-md-4">
+                                        <div class="text-center">
+                                            <img src="/assets/img/logo.webp" style="width: 185px;" alt="logo">
+                                            <h4 class="mt-1 mb-5 pb-1">Beauty</h4>
                                         </div>
-                                        <div data-mdb-input-init class="form-outline mb-4">
-                                          <label for="clave">Clave</label>
-                                          <input type="password" id="clave" class="form-control" placeholder="clave" required/>
-                                          
-                                      </div>
-                                        <div class="text-center pt-1 mb-5 pb-1">
-                                            <button type="submit" id="loginLink" class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3">Iniciar Sesión</button>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-center pb-4">
-                                            <p class="mb-0 me-2">¿No tienes una cuenta?</p>
-                                            <a href="/register" class="btn btn-outline-danger">Crear cuenta</a>
-                                        </div> 
-                                    </form>
+                                        <form id="loginForm">
+                                            <div data-mdb-input-init class="form-outline mb-4">
+                                                <label for="email">Correo</label> 
+                                                <input type="email" id="email" class="form-control" placeholder="Email" required/>
+                                            </div>
+                                            <div data-mdb-input-init class="form-outline mb-4">
+                                                <label for="clave">Clave</label>
+                                                <input type="password" id="clave" class="form-control" placeholder="Clave" required/>
+                                            </div>
+                                            <div class="text-center pt-1 mb-5 pb-1">
+                                                <button type="submit" id="loginLink" class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3">Iniciar Sesión</button>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-center pb-4">
+                                                <p class="mb-0 me-2">¿No tienes una cuenta?</p>
+                                                <a href="/register" class="btn btn-outline-danger">Crear cuenta</a>
+                                            </div> 
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
     <footer class="bg-body-tertiary text-center">
         <div class="container p-4 pb-0">
             <section class="mb-4">
@@ -133,7 +181,6 @@
             <p style="color: #ff69b4;"> © 2020 Cosmeticos Beauty. Todos los derechos reservados.</p>
         </div>
     </footer>
-
     <!-- Custom JavaScript -->   
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/assets/js/app.js" async></script>
