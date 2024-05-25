@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const session = require('express-session');
 const app = express();
-const port = 3400;
+const port = 3306;
 
 const db = mysql.createConnection({
     host: 'localhost',
