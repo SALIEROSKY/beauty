@@ -17,125 +17,75 @@ const pool = new Pool({
     port: 5432, // Puerto predeterminado de PostgreSQL
   });
 
+// Middleware para parsear JSON
 app.use(express.json());
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json()); // Asegura que el servidor pueda manejar JSON
-app.use(session({
-    secret: 'secret', // Cambia esto por una cadena secreta segura
-    resave: false,
-    saveUninitialized: true
-}));
-
-// Servir archivos estáticos de las carpetas 'beauty' y 'assets'
-app.use(express.static(path.join(__dirname, 'beauty')));
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
-
-// Ruta para la página principal
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Ruta para la página 'nosotros.html'
-app.get('/nosotros.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'nosotros.html'));
-});
-
-// Ruta para la página 'login.html'
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login', 'login.html'));
-});
-
-// Ruta para la página 'register.html'
-app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, 'register', 'signup.html'));
-});
-
-// Manejar la autenticación de inicio de sesión
-app.post('/login', (req, res) => {
-    const { email, clave } = req.body;
-    const query = 'SELECT * FROM usuario WHERE CorreoElectronico = ?';
-    db.query(query, [email], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error en el servidor' });
-        }
-        if (result.length > 0) {
-            const hashedPassword = result[0].Clave; // Cambia esto si el nombre de la columna es diferente
-            bcrypt.compare(clave, hashedPassword, (err, bcryptResult) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Error en el servidor' });
-                }
-                if (bcryptResult) {
-                    req.session.user = result[0];
-                    res.json({ exists: true });
-                } else {
-                    res.json({ exists: false });
-                }
-            });
-        } else {
-            res.json({ exists: false });
-        }
-    });
-});
-
-// Manejar las solicitudes POST para registrar un nuevo usuario
-app.post('/register', async (req, res) => {
-    const { nombre, email, clave } = req.body;
-    const saltRounds = 10;
-    const insertUserQuery = 'INSERT INTO usuario (nombre, email, clave) VALUES ($1, $2, $3)';
-    const checkEmailQuery = 'SELECT * FROM usuario WHERE email = $1';
-
-    try {
-        const client = await pool.connect();
-        
-        // Verificar si el correo electrónico ya está en uso
-        const result = await client.query(checkEmailQuery, [email]);
-        if (result.rows.length > 0) {
-            client.release();
-            return res.status(400).json({ error: 'El correo electrónico ya está en uso' });
-        }
-
-        // Encriptar la contraseña
-        const hashedPassword = await bcrypt.hash(clave, saltRounds);
-        
-        // Insertar el nuevo usuario en la base de datos
-        await client.query(insertUserQuery, [nombre, email, hashedPassword]);
-        client.release();
-
-        res.json({ registered: true });
-    } catch (err) {
-        console.error('Error en el servidor:', err);
-        res.status(500).json({ error: 'Error en el servidor' });
+// Ruta para obtener los datos de personas desde la base de datos
+app.get('/CRUDRepo/ConsultarPersonas', (req, res) => {
+  // Realizar consulta SQL para obtener los datos de las personas
+  pool.query('SELECT * FROM humano', (err, results) => {
+    if (err) {
+      console.error('Error al ejecutar la consulta:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+      return;
     }
+    // Enviar los resultados como respuesta en formato JSON
+    res.json(results.rows);
+  });
 });
-// Ruta para la página 'inicio.html'
-app.get('/inicio', (req, res) => { // Asegúrate de que la ruta esté bien definida
-    if (req.session.user) {
-        res.sendFile(path.join(__dirname, 'inicio', 'inicio.html'));
-    } else {
-        res.redirect('/login');
+
+// Ruta para agregar una nueva persona
+app.post('/CRUDRepo/AgregarPersona', (req, res) => {
+  const { nombre, apellido, email, edad} = req.body;
+  pool.query('INSERT INTO humano (nombre, apellido, email, edad) VALUES ($1, $2, $3, $4)', [nombre, apellido, email, edad], (err, results) => {
+    if (err) {
+      console.error('Error al agregar la persona:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+      return;
     }
+    res.status(201).json({ message: 'Persona agregada exitosamente' });
+  });
 });
 
-// Ruta para la página 'carrito.html'
-app.get('/carrito.html', (req, res) => {
-    if (req.session.user) {
-        res.sendFile(path.join(__dirname, 'carrito.html'));
-    } else {
-        res.redirect('/login');
+// Ruta para actualizar los datos de una persona
+app.put('/CRUDRepo/ActualizarPersona/:id', (req, res) => {
+  const { id } = req.params;
+  const { nombre, edad } = req.body;
+  pool.query('UPDATE humano SET nombre = $1, edad = $2 WHERE id = $3', [nombre, edad, id], (err, results) => {
+    if (err) {
+      console.error('Error al actualizar la persona:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+      return;
     }
+    res.json({ message: 'Datos de la persona actualizados exitosamente' });
+  });
 });
 
-// Manejar el cierre de sesión
-app.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return console.error(err);
-        }
-        res.redirect('/login');
-    });
+// Ruta para eliminar una persona
+app.delete('/CRUDRepo/EliminarPersona/:id', (req, res) => {
+  const { id } = req.params;
+  pool.query('DELETE FROM humano WHERE id = $1', [id], (err, results) => {
+    if (err) {
+      console.error('Error al eliminar la persona:', err);
+      res.status(500).json({ error: 'Error interno del servidor' });
+      return;
+    }
+    res.json({ message: 'Persona eliminada exitosamente' });
+  });
 });
 
-app.listen(port, () => {
-    console.log(`Servidor escuchando en http://localhost:${port}`);
+// Manejo de errores para rutas no encontradas
+app.use((req, res, next) => {
+  res.status(404).json({ error: 'Ruta no encontrada' });
+});
+
+// Manejador de errores genérico
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Error interno del servidor' });
+});
+
+// Iniciar el servidor en el puerto específico
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
