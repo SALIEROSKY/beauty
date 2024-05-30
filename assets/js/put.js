@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const edad = edadInput.value;
 
       // Realizar la solicitud de actualización al servidor
-      fetch(`https://conexionexpressmysql.onrender.com/CRUDRepo/ActualizarPersona/${userId}`, {
+      fetch(`https://beauty-xabz.onrender.com/CRUDRepo/ActualizarPersona/${userId}`, {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json'

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('https://conexionexpressmysql.onrender.com/CRUDRepo/ConsultarPersonas')
+    fetch('https://beauty-xabz.onrender.com/CRUDRepo/ConsultarPersonas')
       .then(response => response.json())
       .then(data => mostrarData(data))
       .catch(error => console.log(error));
