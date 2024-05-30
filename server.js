@@ -86,6 +86,6 @@ app.use((err, req, res, next) => {
 });
 
 // Iniciar el servidor en el puerto específico
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+app.listen(port, () => {
+  console.log(`Servidor escuchando en el puerto ${port}`);
 });
