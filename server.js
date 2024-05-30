@@ -1,25 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const path = require('path');
 const session = require('express-session');
+const cors = require('cors');
 const app = express();
-const port = 3306;
+app.use(cors()); 
+const port = 3400;
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'beauty_cosmeticos'
-});
+const pool = new Pool({
+    user: 'admin',
+    host: 'dpg-cpaht6f109ks73aot47g-a',
+    database: 'beautybd',
+    password: 'AfsEo1bmhm2McpgYscOEUwjk2Qer8rAX',
+    port: 5432, // Puerto predeterminado de PostgreSQL
+  });
 
-db.connect((err) => {
-    if (err) {
-        throw err;
-    }
-    console.log('Conexión a la base de datos establecida');
-});
+app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // Asegura que el servidor pueda manejar JSON
@@ -81,33 +79,35 @@ app.post('/login', (req, res) => {
 });
 
 // Manejar las solicitudes POST para registrar un nuevo usuario
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
     const { nombre, email, clave } = req.body;
     const saltRounds = 10;
-    const insertUserQuery = 'INSERT INTO usuario (Nombre, CorreoElectronico, Clave) VALUES (?, ?, ?)';
+    const insertUserQuery = 'INSERT INTO usuario (nombre, email, clave) VALUES ($1, $2, $3)';
+    const checkEmailQuery = 'SELECT * FROM usuario WHERE email = $1';
 
-    const checkEmailQuery = 'SELECT * FROM usuario WHERE CorreoElectronico = ?';
-    db.query(checkEmailQuery, [email], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error en el servidor' });
-        }
-        if (result.length > 0) {
+    try {
+        const client = await pool.connect();
+        
+        // Verificar si el correo electrónico ya está en uso
+        const result = await client.query(checkEmailQuery, [email]);
+        if (result.rows.length > 0) {
+            client.release();
             return res.status(400).json({ error: 'El correo electrónico ya está en uso' });
         }
-        bcrypt.hash(clave, saltRounds, (err, hashedPassword) => {
-            if (err) {
-                return res.status(500).json({ error: 'Error en el servidor' });
-            }
-            db.query(insertUserQuery, [nombre, email, hashedPassword], (err, result) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Error en el servidor' });
-                }
-                res.json({ registered: true });
-            });
-        });
-    });
-});
 
+        // Encriptar la contraseña
+        const hashedPassword = await bcrypt.hash(clave, saltRounds);
+        
+        // Insertar el nuevo usuario en la base de datos
+        await client.query(insertUserQuery, [nombre, email, hashedPassword]);
+        client.release();
+
+        res.json({ registered: true });
+    } catch (err) {
+        console.error('Error en el servidor:', err);
+        res.status(500).json({ error: 'Error en el servidor' });
+    }
+});
 // Ruta para la página 'inicio.html'
 app.get('/inicio', (req, res) => { // Asegúrate de que la ruta esté bien definida
     if (req.session.user) {

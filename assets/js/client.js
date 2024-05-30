@@ -1,9 +1,7 @@
-// Espera a que el documento HTML esté completamente cargado antes de ejecutar el código
- $(document).ready(function() {
-//     // Asigna un evento de clic al elemento con id 'loginLink'
+$(document).ready(function() {
     // Asigna un evento de envío al formulario con id 'loginForm'
     $('#loginForm').submit(function(event) {
-        //event.preventDefault(); // Previene el comportamiento por defecto del formulario
+        event.preventDefault(); // Previene el comportamiento por defecto del formulario
         // Obtiene los valores de los campos de entrada
         let email = $('#email').val();
         let clave = $('#clave').val();
@@ -12,13 +10,31 @@
         $.post('/login', { email: email, clave: clave }, function(response) {
             // Verifica si el usuario existe en la respuesta del servidor
             if (response.exists) {
-                // Redirige a la página de inicio
-                window.location.href = '/inicio';
+                // Redirige a la página correspondiente según el perfil del usuario
+                if (response.perfilId === 1) {
+                    // Redirige a la página de inicio del administrador
+                    window.location.href = '/inicio-admin';
+                } else {
+                    // Redirige a la página de inicio regular
+                    window.location.href = '/inicio';
+                }
             } else {
                 // Muestra un mensaje de error utilizando la librería Swal
                 Swal.fire('Correo no encontrado', 'El correo no existe o la clave es incorrecta.', 'error');
             }
         });
+    });
+
+    // Función para cerrar sesión
+    function logout() {
+        // Redirige al index
+        window.location.href = '/index';
+    }
+
+    // Asigna un evento de clic al elemento con id 'logoutLink' para cerrar sesión
+    $('#logoutLink').click(function(event) {
+        event.preventDefault(); // Previene el comportamiento predeterminado del enlace
+        logout(); // Ejecuta la función de logout
     });
 
     // Asigna un evento de envío al formulario con id 'registerForm'
@@ -27,13 +43,13 @@
         // Obtiene los valores de los campos de entrada
         let nombre = $('#name').val();
         let email = $('#email').val();
-        let contraseña = $('#password').val();
+        let clave = $('#password').val();
         
         // Realiza una solicitud AJAX al servidor para registrar un nuevo usuario
         $.ajax({
             url: '/register',
             type: 'POST',
-            data: { nombre: nombre, email: email, contraseña: contraseña },
+            data: { nombre: nombre, correo: email, clave: clave }, // Ajuste de los nombres de los campos
             // Función a ejecutar si la solicitud es exitosa
             success: function(response) {
                 // Verifica si el usuario se registró correctamente
