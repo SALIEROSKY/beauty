@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const email = document.getElementById('email').value;
       const edad = document.getElementById('edad').value;
   
-      fetch('https://beauty-xabz.onrender.com/CRUDRepo/AgregarPersona', {
+      fetch('https://beauty-571w.onrender.com/CRUDRepo/AgregarPersona', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

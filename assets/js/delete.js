@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
       const id = document.getElementById('id').value;
   
-      fetch(`https://beauty-xabz.onrender.com/CRUDRepo/EliminarPersona/${id}`, {
+      fetch(`https://beauty-571w.onrender.com/CRUDRepo/EliminarPersona/${id}`, {
         method: 'DELETE'
       })
       .then(response => {
