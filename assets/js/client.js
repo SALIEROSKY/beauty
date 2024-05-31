@@ -19,7 +19,7 @@ $(document).ready(function() {
 
                 // Redirige a la página correspondiente según el perfil del usuario
                 if (response.perfilId === 1) {
-                    window.location.href = '/inicio-admin';
+                    window.location.href = '/inicio/inicio-admin'; // Cambio de ruta para el administrador
                 } else {
                     window.location.href = '/inicio';
                 }

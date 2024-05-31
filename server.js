@@ -53,6 +53,10 @@ app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'register', 'signup.html'));
 });
 
+app.get('/inicio-admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'inicio', 'inicioAdmin.html'));
+});
+
 // Manejar la autenticación de inicio de sesión
 app.post('/login', (req, res) => {
     const { email, clave } = req.body;
@@ -62,14 +66,15 @@ app.post('/login', (req, res) => {
             return res.status(500).json({ error: 'Error en el servidor' });
         }
         if (result.length > 0) {
-            const hashedPassword = result[0].Clave; // Cambia esto si el nombre de la columna es diferente
+            const user = result[0];
+            const hashedPassword = user.Clave;
             bcrypt.compare(clave, hashedPassword, (err, bcryptResult) => {
                 if (err) {
                     return res.status(500).json({ error: 'Error en el servidor' });
                 }
                 if (bcryptResult) {
-                    req.session.user = result[0];
-                    res.json({ exists: true });
+                    req.session.user = user;
+                    res.json({ exists: true, perfilId: user.ID_Perfil }); // Devuelve el perfilId
                 } else {
                     res.json({ exists: false });
                 }
@@ -79,6 +84,7 @@ app.post('/login', (req, res) => {
         }
     });
 });
+
 
 // Manejar las solicitudes POST para registrar un nuevo usuario
 app.post('/register', (req, res) => {
