@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    // Verifica si el usuario ya está logueado al cargar la página
+    checkLoginStatus();
+
     // Asigna un evento de envío al formulario de inicio de sesión
     $('#loginForm').submit(function(event) {
         event.preventDefault(); // Previene el comportamiento por defecto del formulario
@@ -10,12 +13,14 @@ $(document).ready(function() {
         $.post('/login', { email: email, clave: clave }, function(response) {
             // Verifica si el usuario existe en la respuesta del servidor
             if (response.exists) {
+                // Almacena el email del usuario en localStorage
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userPerfilId', response.perfilId);
+
                 // Redirige a la página correspondiente según el perfil del usuario
                 if (response.perfilId === 1) {
-                    // Redirige a la página de inicio del administrador
                     window.location.href = '/inicio-admin';
                 } else {
-                    // Redirige a la página de inicio regular
                     window.location.href = '/inicio';
                 }
             } else {
@@ -24,12 +29,6 @@ $(document).ready(function() {
             }
         });
     });
-
-    // Función para cerrar sesión
-    function logout() {
-        // Redirige al index
-        window.location.href = '/index';
-    }
 
     // Asigna un evento de clic al elemento con id 'logoutLink' para cerrar sesión
     $('#logoutLink').click(function(event) {
@@ -51,25 +50,47 @@ $(document).ready(function() {
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ name: name, email: email, clave: password }),
-            // Función a ejecutar si la solicitud es exitosa
             success: function(response) {
                 // Verifica si el usuario se registró correctamente
                 if (response.registered) {
                     // Muestra un mensaje de éxito utilizando la librería Swal
                     Swal.fire('Registro exitoso', '¡Usuario registrado correctamente!', 'success').then(() => {
-                        // Redirige a la página de inicio de sesión después de que se cierre el mensaje de éxito
-                        window.location.href = '/login';
+                        window.location.href = '/login'; // Redirige a la página de inicio de sesión
                     });
                 } else {
-                    // Muestra un mensaje de error utilizando la librería Swal
-                    Swal.fire('Error', 'La creación del usuario falló', 'error');
+                    Swal.fire('Error', 'La creación del usuario falló', 'error'); // Muestra un mensaje de error
                 }
             },
-            // Función a ejecutar si hay un error en la solicitud
             error: function(xhr, status, error) {
-                // Muestra un mensaje de error utilizando la librería Swal
-                Swal.fire('Error', 'El usuario ya está registrado o hubo un problema en el servidor.', 'error');
+                Swal.fire('Error', 'El usuario ya está registrado o hubo un problema en el servidor.', 'error'); // Muestra un mensaje de error
             }
         });
     });
+
+    // Función para cerrar sesión
+    function logout() {
+        // Elimina la información del usuario de localStorage
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userPerfilId');
+
+        // Redirige al index
+        window.location.href = '/';
+    }
+
+    // Función para verificar el estado de inicio de sesión
+    function checkLoginStatus() {
+        let userEmail = localStorage.getItem('userEmail');
+        let userPerfilId = localStorage.getItem('userPerfilId');
+
+        if (userEmail && userPerfilId) {
+            // Muestra el email del usuario y el botón de cerrar sesión
+            $('#userEmail').text(userEmail);
+            $('#userContainer').show();
+            $('#navLinks, #searchForm').hide();
+        } else {
+            // Si no está logueado, muestra los enlaces de navegación y el formulario de búsqueda
+            $('#userContainer').hide();
+            $('#navLinks, #searchForm').show();
+        }
+    }
 });

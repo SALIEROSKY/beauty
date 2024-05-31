@@ -52,82 +52,49 @@
           }
         </style>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-          <div class="container-fluid">
-              <a class="navbar-brand" href="#">
-                  <img src="/assets/img/logo.webp" alt="Logo" width="170" height="90" class="d-inline-block align-text-top">
-              </a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
-                <form class="d-flex ms-auto pink-border">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-primary pink-btn" type="submit">
-                      <i class="fas fa-search"></i>
-                  </button>
-              </form>
-              <script>
-                function searchFunction() {
-                    const input = document.getElementById('search-input');
-                    const searchTerm = input.value.trim();
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="/assets/img/logo.webp" alt="Logo" width="170" height="90" class="d-inline-block align-text-top">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <form class="d-flex ms-auto pink-border" id="searchForm">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-primary pink-btn" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <ul class="navbar-nav ms-auto" id="navLinks">
+                        <li class="nav-item active">
+                            <a class="nav-link" aria-current="page" href="/" style="color: #ff69b4;">INICIO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#TESTIMONIOS" style="color: #ff69b4;">| TESTIMONIOS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/nosotros.html" style="color: #ff69b4;">| NOSOTROS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#CONTACTENOS" style="color: #ff69b4;">| CONTACTENOS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/carrito.html" style="color: #ff69b4;">
+                                <i class="fas fa-shopping-cart"></i> Catalogo
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center ms-auto" id="userContainer" style="display: none;">
+                        <span id="userEmail" style="color: #ff69b4; margin-right: 10px;"></span>
+                        <a href="#" id="logoutLink" class="btn btn-outline-danger">Cerrar sesión</a>
+                    </div>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ </div>
+            </div>
+        </nav>
         
-                    if (searchTerm) {
-                        alert(`You searched for: ${searchTerm}`);
-                        // Add your custom search logic here.
-                    } else {
-                        alert('Please enter a search term.');
-                    }
-                }
-            </script>
-                <script>
-                    $(document).ready(function() {
-                        // Obtiene el nombre de usuario de la URL
-                        const urlParams = new URLSearchParams(window.location.search);
-                        const username = urlParams.get('email');
-            
-                        // Muestra el nombre de usuario en la página de inicio
-                        $('#email').text(username);
-                    });
-                </script>
-                  <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" aria-current="page" href="/" style="color: #ff69b4;">INICIO</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/#TESTIMONIOS" style="color: #ff69b4;">| TESTIMONIOS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/nosotros.html" style="color: #ff69b4;">| NOSOTROS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/#CONTACTENOS" style="color: #ff69b4;">| CONTACTENOS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/carrito.html" style="color: #ff69b4;">
-                            <i class="fas fa-shopping-cart"></i> Carrito
-                        </a>
-                    </li>
-                    <!-- Agregar un enlace con un ícono para la página de cierre de sesión -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" style="color: #ff69b4;">
-                            <i class="fas fa-user"></i>
-                            <span id="email" style="margin-left: 5px;"></span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/" id="logoutLink" onclick="logout()" style="color: #ff69b4;">Cerrar Sesión</a>
-                    </li>
-                    <!-- Agregar un enlace con un ícono para la página de inicio de sesión -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login" id="loginLink" style="color: #ff69b4;">
-                            <i class="fas fa-user"></i> Inicio Sesion
-                        </a>
-                    </li>
-                </ul>
-              </div>
-          </div>
-      </nav>
       <div id="intro-example" class="p-5 text-center bg-image" 
 style="background-image: url(https://raspberrymag.com/wp-content/uploads/2020/09/cosmeticos-maquillaje-e1571597050506.jpg);">
 <div class="mask" style="background-color: rgba(0, 0, 0, 0.7);">
@@ -322,5 +289,6 @@ style="background-image: url(https://raspberrymag.com/wp-content/uploads/2020/09
           </footer>
                   <!-- Custom JavaScript -->
         <script src="/assets/js/app.js" async></script>
+        <script src="/assets/js/client.js" async></script>
 </body>
 </html>
