@@ -5,10 +5,11 @@ $(document).ready(function() {
     // Asigna un evento de envío al formulario de inicio de sesión
     $('#loginForm').submit(function(event) {
         event.preventDefault(); // Previene el comportamiento por defecto del formulario
+    
         // Obtiene los valores de los campos de entrada
         let email = $('#email').val();
         let clave = $('#clave').val();
-
+    
         // Realiza una solicitud POST al servidor con los datos de inicio de sesión
         $.post('/login', { email: email, clave: clave }, function(response) {
             // Verifica si el usuario existe en la respuesta del servidor
@@ -16,10 +17,10 @@ $(document).ready(function() {
                 // Almacena el email del usuario en localStorage
                 localStorage.setItem('userEmail', email);
                 localStorage.setItem('userPerfilId', response.perfilId);
-
+    
                 // Redirige a la página correspondiente según el perfil del usuario
                 if (response.perfilId === 1) {
-                    window.location.href = '/inicio/inicio-admin'; // Cambio de ruta para el administrador
+                    window.location.href = '/inicio-admin'; // Ruta correcta para el administrador
                 } else {
                     window.location.href = '/inicio';
                 }
@@ -29,6 +30,7 @@ $(document).ready(function() {
             }
         });
     });
+    
 
     // Asigna un evento de clic al elemento con id 'logoutLink' para cerrar sesión
     $('#logoutLink').click(function(event) {

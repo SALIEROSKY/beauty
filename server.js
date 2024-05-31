@@ -123,6 +123,14 @@ app.get('/inicio', (req, res) => { // Asegúrate de que la ruta esté bien defin
     }
 });
 
+app.get('/inicio-admin', (req, res) => {
+    if (req.session.user && req.session.user.ID_Perfil === 1) {
+        res.sendFile(path.join(__dirname, 'inicio', 'inicioAdmin.html'));
+    } else {
+        res.redirect('/login');
+    }
+});
+
 // Ruta para la página 'carrito.html'
 app.get('/carrito.html', (req, res) => {
     if (req.session.user) {
