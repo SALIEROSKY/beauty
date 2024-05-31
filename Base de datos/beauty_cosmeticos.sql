@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-05-2024 a las 05:30:38
+-- Tiempo de generación: 01-06-2024 a las 00:07:00
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,65 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `categoria`
---
-
-CREATE TABLE `categoria` (
-  `ID_Categoria` int(11) NOT NULL,
-  `NombreCategoria` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `categoria`
---
-
-INSERT INTO `categoria` (`ID_Categoria`, `NombreCategoria`) VALUES
-(1, 'Belleza Facial'),
-(2, 'Belleza corporal'),
-(3, 'Ojos resplandecientes');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `detallepedido`
---
-
-CREATE TABLE `detallepedido` (
-  `ID_DetallePedido` int(11) NOT NULL,
-  `ID_Pedido` int(11) DEFAULT NULL,
-  `ID_Producto` int(11) DEFAULT NULL,
-  `Cantidad` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `metodopago`
---
-
-CREATE TABLE `metodopago` (
-  `ID_MetodoPago` int(11) NOT NULL,
-  `NombreMetodoPago` varchar(100) NOT NULL,
-  `Descripcion` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pedido`
---
-
-CREATE TABLE `pedido` (
-  `ID_Pedido` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Estado` varchar(50) NOT NULL,
-  `ID_Usuario` int(11) DEFAULT NULL,
-  `ID_MetodoPago` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `perfil`
 --
 
@@ -96,7 +37,8 @@ CREATE TABLE `perfil` (
 --
 
 INSERT INTO `perfil` (`ID_Perfil`, `Tipo_Perfil`) VALUES
-(1, 'administrador');
+(1, 'administrador'),
+(2, 'Cliente');
 
 -- --------------------------------------------------------
 
@@ -106,11 +48,9 @@ INSERT INTO `perfil` (`ID_Perfil`, `Tipo_Perfil`) VALUES
 
 CREATE TABLE `producto` (
   `ID_Producto` int(11) NOT NULL,
-  `Nombre` varchar(100) NOT NULL,
+  `Nombre` varchar(255) NOT NULL,
   `Descripcion` text DEFAULT NULL,
-  `Precio` decimal(10,2) NOT NULL,
-  `Stock` int(11) NOT NULL,
-  `ID_Categoria` int(11) DEFAULT NULL
+  `Precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -128,36 +68,32 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`ID_Usuario`, `Nombre`, `CorreoElectronico`, `Clave`, `ID_Perfil`) VALUES
+(4, 'Laura', 'Laura123@gmail.com', '$2b$10$aMZQLh.pL1RhavgqYJC4uOZRJNGhTcazADL6YRa2KprEihle/GCny', NULL),
+(5, 'Camilo Hurtado', 'churtado2010@hotmail.com', '$2b$10$D.tcHb/JBkDSGj07oeri/.mI5F66XYRhP7l6J6eL/t1uTixWHvtvO', 1),
+(6, 'patitoadmin', 'patito@mail.com', '$2b$10$L1xEcp2pUC7ffcwJUWNz6uxCHVerqC2cNGaVtsOZc/ai5gbKOqNi2', NULL),
+(8, 'alexander', 'alexanderhernandez0622@gmail.com', '$2b$10$xqLqImOjPib7lkVBlbzd5OVdtU.EFC8Z71yjrSrFnzR7v6WZ4vHoy', NULL),
+(10, 'EMILY', 'emily@mail.com', '$2b$10$RXV7bx0jMDL8Kir.CmkgFepD.gbqlfbRRlLc9g/XBFZIOsYPYvhz6', NULL),
+(11, 'Juan', 'Juan@gmail.com', '$2b$10$DwbwaD1izIGN14Jg3V222uQvqskohQhGAUy.ZfgQhlyFjUAMJ65lS', NULL),
+(12, 'Florecita', 'flor@gmail.com', '$2b$10$uezK5e3MRhBk12UjnEMXWe/YIE82u0ZzcFHwN7n6tXBLNbOFSP1ai', NULL),
+(13, 'juan', 'patojuan@mail.com', '$2b$10$H/eLba1UnTX6hqHk7U8XNusB8QJlYplPa/d5HtVgxQv9fHX1z3YHy', NULL),
+(14, 'Juan', 'Carlos3@gmail.com', '$2b$10$BCfZi/okAyMJvyrZuU5cJeXW3ZskgervQ75C6IVnX3vXnqBg5MuuO', NULL),
+(15, 'ev1', 'ev1@mail.com', '$2b$10$300Ps8OSZcZiD3Cx4LPozOtuNALM7gRx8eDQcXh2yKiuZHFxa5aaK', NULL),
+(16, 'ev1', 'ev1@mail.com', '$2b$10$IgGtlfQm9sZwvNmOHd0rAOYBlsi1px11NP53QAFB0cMwqY5tp.oxC', NULL),
+(17, 'Juan', 'juan1223@gmail.com', '$2b$10$ZwJjoBw4JOlR6DbRPrx5hOU7Hb69lYE12kGvgm7/1Z5Vqmh7Vlq7W', NULL),
+(18, 'Juan', 'juan1223@gmail.com', '$2b$10$QXfFJhtaxiBx3c9ab5Rzzu6UBkuvPN82ozADB5SzZGy8ZZyz4URBi', NULL),
+(19, 'lina', 'negra1234@mail.com', '$2b$10$yfIGDHz1ZSV851cqQA6rl.dOlBbtXdYslKuFR8ysJJu2oTOLXmubS', NULL),
+(20, 'lina', 'negra1234@mail.com', '$2b$10$.FzfInuYIVFDefs74a8Xi.DCqA9heTIPJJKxcn1WcQvDBRrCbvNeq', NULL),
+(21, 'patito', 'patitochalenger@mail.com', '$2b$10$BY8FlRn1C8/9Zijhj1J1wO6YZ05LOZy0IDWrX7KOel5vBXY6N4qle', NULL),
+(22, 'patito faker', 'patitot1@mail.com', '$2b$10$XWrVm8Ozz//6pjqKmTYg8e0se8TTGuVlegMtZ/seMePOQpkY7F4Si', 1),
+(23, 'erik prueba nocturna', 'ahhh@mail.com', '$2b$10$Aa6bUmrzyma/hQh1rz/I2uXzeU/0hWdKvlrkz9aR6h/aYvYITRul2', 1),
+
+--
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `categoria`
---
-ALTER TABLE `categoria`
-  ADD PRIMARY KEY (`ID_Categoria`);
-
---
--- Indices de la tabla `detallepedido`
---
-ALTER TABLE `detallepedido`
-  ADD PRIMARY KEY (`ID_DetallePedido`),
-  ADD KEY `ID_Pedido` (`ID_Pedido`),
-  ADD KEY `ID_Producto` (`ID_Producto`);
-
---
--- Indices de la tabla `metodopago`
---
-ALTER TABLE `metodopago`
-  ADD PRIMARY KEY (`ID_MetodoPago`);
-
---
--- Indices de la tabla `pedido`
---
-ALTER TABLE `pedido`
-  ADD PRIMARY KEY (`ID_Pedido`),
-  ADD KEY `ID_Usuario` (`ID_Usuario`),
-  ADD KEY `ID_MetodoPago` (`ID_MetodoPago`);
 
 --
 -- Indices de la tabla `perfil`
@@ -169,8 +105,7 @@ ALTER TABLE `perfil`
 -- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
-  ADD PRIMARY KEY (`ID_Producto`),
-  ADD KEY `ID_Categoria` (`ID_Categoria`);
+  ADD PRIMARY KEY (`ID_Producto`);
 
 --
 -- Indices de la tabla `usuario`
@@ -184,34 +119,10 @@ ALTER TABLE `usuario`
 --
 
 --
--- AUTO_INCREMENT de la tabla `categoria`
---
-ALTER TABLE `categoria`
-  MODIFY `ID_Categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de la tabla `detallepedido`
---
-ALTER TABLE `detallepedido`
-  MODIFY `ID_DetallePedido` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `metodopago`
---
-ALTER TABLE `metodopago`
-  MODIFY `ID_MetodoPago` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `pedido`
---
-ALTER TABLE `pedido`
-  MODIFY `ID_Pedido` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `perfil`
 --
 ALTER TABLE `perfil`
-  MODIFY `ID_Perfil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Perfil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
@@ -223,31 +134,11 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `detallepedido`
---
-ALTER TABLE `detallepedido`
-  ADD CONSTRAINT `detallepedido_ibfk_1` FOREIGN KEY (`ID_Pedido`) REFERENCES `pedido` (`ID_Pedido`),
-  ADD CONSTRAINT `detallepedido_ibfk_2` FOREIGN KEY (`ID_Producto`) REFERENCES `producto` (`ID_Producto`);
-
---
--- Filtros para la tabla `pedido`
---
-ALTER TABLE `pedido`
-  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`ID_Usuario`) REFERENCES `usuario` (`ID_Usuario`),
-  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`ID_MetodoPago`) REFERENCES `metodopago` (`ID_MetodoPago`);
-
---
--- Filtros para la tabla `producto`
---
-ALTER TABLE `producto`
-  ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`ID_Categoria`) REFERENCES `categoria` (`ID_Categoria`);
 
 --
 -- Filtros para la tabla `usuario`
