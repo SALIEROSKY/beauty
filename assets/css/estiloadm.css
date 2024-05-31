@@ -1,0 +1,49 @@
+ /* Estilos adicionales personalizados */
+ .header {
+    background-color: #000;
+    color: #ff8fc7;
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+.footer {
+    background-color: #000;
+    color: #ff69b4;
+    text-align: center;
+    padding: 20px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Estilos para la tabla central */
+.content-table {
+    margin: 0 auto;
+    width: 70%; /* Ajusta el ancho de la tabla */
+    table-layout: fixed; /* Fija el ancho de las columnas */
+    border-collapse: collapse;
+}
+
+.content-table th, .content-table td {
+    padding: 40px; /* Ajusta el padding para que sea más grande */
+    text-align: center;
+    cursor: pointer; /* Agrega un cursor al pasar el ratón */
+    font-size: 24px; /* Tamaño de la letra más grande */
+}
+
+/* Efecto hover */
+.content-table th:hover, .content-table td:hover {
+    background-color: #ff69b4;
+    color: white;
+}
+
+/* Estilo para la altura máxima */
+.content {
+    min-height: calc(100vh - 220px); /* Calcula el espacio entre el encabezado y el pie de página */
+}
+
+/* Estilo para los iconos */
+.icon {
+    font-size: 48px; /* Tamaño de los iconos más grande */
+}
