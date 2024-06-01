@@ -12,13 +12,14 @@
 </head>
 <body>
     <div class="header">
-        <h2 class="mx-auto">Dashboard de Administrador</h2>
-        <div class="d-flex align-items-center">
-            <span id="userContainer" style="display: none;">
-                <span id="userEmail" style="color: #ff69b4; margin-right: 10px;"></span>
-                <a href="#" id="logoutLink" class="btn btn-primary pink-btn" style="color: white; background-color: #ff69b4;">Cerrar sesión</a>
-            </span>
+        <h2 class="mx-auto">Dashboard Administrador</h2>
+        <div class="user-container" id="userContainer" style="display: none;">
+            <span id="userEmail" class="text-primary"></span>
+            <a href="#" id="logoutLink" class="btn btn-primary pink-btn">Cerrar sesión</a>
         </div>
+    </div>
+    <div class="subheader text-center">
+        <span id="userName"></span>
     </div>
     <div class="container">
         <h1 class="mt-5">Crear Producto</h1>

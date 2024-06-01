@@ -30,12 +30,11 @@ $(document).ready(function() {
             }
         });
     });
-    
 
     // Asigna un evento de clic al elemento con id 'logoutLink' para cerrar sesión
     $('#logoutLink').click(function(event) {
         event.preventDefault(); // Previene el comportamiento predeterminado del enlace
-        logout(); // Ejecuta la función de logout
+        logout();
     });
 
     // Asigna un evento de envío al formulario de registro
@@ -75,8 +74,8 @@ $(document).ready(function() {
         localStorage.removeItem('userEmail');
         localStorage.removeItem('userPerfilId');
 
-        // Redirige al index
-        window.location.href = '/';
+        // Redirige al login
+        window.location.href = '/login';
     }
 
     // Función para verificar el estado de inicio de sesión

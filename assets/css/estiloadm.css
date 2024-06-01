@@ -17,6 +17,11 @@
     width: 100%;
 }
 
+.btn-pink {
+    color: white !important;
+    background-color: #ff69b4 !important;
+    border-color: #ff69b4 !important;
+}
 /* Estilos para la tabla central */
 .content-table {
     margin: 0 auto;
@@ -47,3 +52,16 @@
 .icon {
     font-size: 48px; /* Tamaño de los iconos más grande */
 }
+        #logoutLink {
+            color: white !important; /* Color de texto blanco */
+            background-color: #ff69b4 !important; /* Fondo rosa */
+            border-color: #ff69b4 !important; /* Borde rosa */
+        }
+
+        /* Estilo para el texto "Dashboard Administrador" */
+        .navbar-title {
+            font-size: 24px; /* Tamaño de fuente */
+            color: #ff69b4; /* Color del texto rosa */
+            flex: 1; /* Ocupar todo el espacio disponible */
+            text-align: center; /* Centrar el texto */
+        }

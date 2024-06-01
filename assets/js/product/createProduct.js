@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const precio = precioInput.value;
 
             // Realizar la solicitud para crear el producto al servidor
-            fetch('/api/products', {
+            fetch('http://localhost:3400/api/CreateProducto', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
