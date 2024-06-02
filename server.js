@@ -223,6 +223,8 @@ app.delete('/perfil/eliminarPerfil/:id', (req, res) => {
     });
 });
 
+
+// Ruta para actualizar los datos de un usuario
 app.post('/usuarios/agregarUsuario', (req, res) => {
     const { nombre, correoElectronico, clave, idPerfil } = req.body;
     const saltRounds = 10;
@@ -246,8 +248,6 @@ app.post('/usuarios/agregarUsuario', (req, res) => {
     });
 });
 
-
-// Ruta para actualizar los datos de un usuario
 app.put('/usuarios/actualizarUsuario/:id', (req, res) => {
     const { id } = req.params;
     const { nombre, correoElectronico, clave, idPerfil } = req.body;
@@ -279,6 +279,60 @@ app.delete('/usuarios/eliminarUsuario/:id', (req, res) => {
 app.get('/usuarios/consultarUsuarios', (req, res) => {
     // Realizar la consulta SQL
     const query = 'SELECT * FROM usuario';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error al ejecutar la consulta:', err);
+            res.status(500).json({ error: 'Error interno del servidor' });
+            return;
+        }
+        // Enviar los resultados en formato JSON
+        res.json(results);
+    });
+});
+
+
+// Ruta para productos
+app.post('/producto/agregarProducto', (req, res) => {
+    const { Nombre, Descripcion, Precio } = req.body;
+    db.query('INSERT INTO producto (Nombre, Descripcion, Precio) VALUES (?, ?, ?)', [Nombre, Descripcion, Precio], (err, results) => {
+        if (err) {
+            console.error('Error al agregar el producto:', err);
+            res.status(500).json({ error: 'Error interno del servidor' });
+            return;
+        }
+        res.status(201).json({ message: 'Producto agregado exitosamente' });
+    });
+});
+
+app.put('/producto/actualizarProducto/:id', (req, res) => {
+    const { id } = req.params;
+    const { Nombre, Descripcion, Precio } = req.body;
+    const query = 'UPDATE producto SET Nombre = ?, Descripcion = ?, Precio = ? WHERE ID_Producto = ?';
+
+    db.query(query, [Nombre, Descripcion, Precio, id], (err, results) => {
+        if (err) {
+            console.error('Error al actualizar el producto:', err);
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+        res.json({ message: 'Datos del producto actualizados exitosamente' });
+    });
+});
+
+app.delete('/producto/eliminarProducto/:id', (req, res) => {
+    const { id } = req.params;
+    db.query('DELETE FROM producto WHERE ID_Producto = ?', [id], (err, results) => {
+        if (err) {
+            console.error('Error al eliminar el producto:', err);
+            res.status(500).json({ error: 'Error interno del servidor' });
+            return;
+        }
+        res.json({ message: 'Producto eliminado exitosamente' });
+    });
+});
+
+app.get('/producto/consultarProducto', (req, res) => {
+    // Realizar la consulta SQL
+    const query = 'SELECT * FROM producto';
     db.query(query, (err, results) => {
         if (err) {
             console.error('Error al ejecutar la consulta:', err);
@@ -325,6 +379,21 @@ app.get('/user-create', (req, res) => {
 // Ruta para mostrar el formulario de edición de usuario
 app.get('/user-edit/:id', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'usuarios', 'user-edit.html'));
+});
+
+// Ruta para mostrar la lista de productos
+app.get('/product-list', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'productos', 'product-list.html'));
+});
+
+// Ruta para mostrar el formulario de creación de productos
+app.get('/product-create', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'productos', 'product-create.html'));
+});
+
+// Ruta para mostrar el formulario de edición de productos
+app.get('/product-edit/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'productos', 'product-edit.html'));
 });
 
 app.listen(port, () => {
