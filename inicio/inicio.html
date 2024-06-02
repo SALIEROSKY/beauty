@@ -213,25 +213,27 @@ style="background-image: url(https://raspberrymag.com/wp-content/uploads/2020/09
     <span class="precio-item">$35000</span>
 </div>
         </div>
-        <!-- Carrito de Compras -->
-        <div class="carrito" id="carrito">
-            <div class="header-carrito">
-                <h2>Tu Carrito</h2>
-            </div>
 
-            <div class="carrito-items"> 
-            </div>
-            <div class="carrito-total">
-                <div class="fila">
-                    <strong>Tu Total</strong>
-                    <span class="carrito-precio-total">
-                        $120.000,00
-                    </span>
-                </div>
-                <button class="btn-pagar">Pagar <i class="fa-solid fa-bag-shopping"></i> </button>
-            </div>
-        </div>
     </section>
+    <!-- Contenedor de la imagen y el texto llamativo -->
+<div style="display: flex; flex-direction: row; justify-content: center; align-items: center; height: 100vh;">
+    <!-- Imagen reducida -->
+    <!-- Texto llamativo -->
+    <div style="width: 60%; text-align: center;">
+        <h2 style="color: #ff69b4;">¡Escanea nuestro código QR y descubre más ofertas!</h2>
+        <p>¡Compra ahora y obtén envío gratuito en tu primer pedido!</p>
+        <script async
+  src="https://js.stripe.com/v3/buy-button.js">
+</script>
+
+<stripe-buy-button
+  buy-button-id="buy_btn_1PMu7SRuOWTdmOaipTEes6sX"
+  publishable-key="pk_test_51PJP7yRuOWTdmOaiwGkqhcVLSMXur6mcQItPqwI0DqJVBQvnQTYx1ZUsUMcFoULuSYyK71JwIwJRBbI7FlO3vBXi001AoPwjB0"
+>
+</stripe-buy-button>
+    </div>
+</div>
+
         <footer class="bg-body-tertiary text-center">
             <!-- Grid container -->
             <div class="container p-4 pb-0">
