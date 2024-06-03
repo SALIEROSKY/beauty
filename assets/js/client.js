@@ -26,7 +26,7 @@ $(document).ready(function() {
                 }
             } else {
                 // Muestra un mensaje de error utilizando la librería Swal
-                Swal.fire('Correo no encontrado', 'El correo no existe o la clave es incorrecta.', 'error');
+                Swal.fire('Acceso denegado', 'El correo no existe o la clave es incorrecta.', 'error');
             }
         });
     });
