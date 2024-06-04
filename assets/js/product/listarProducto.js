@@ -34,9 +34,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${producto.Descripcion}</td>
                 <td>${producto.Precio}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm" onclick="editarProducto(${producto.ID_Producto})">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
                     <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${producto.ID_Producto})">
                         <i class="fas fa-trash-alt"></i> Eliminar
                     </button>

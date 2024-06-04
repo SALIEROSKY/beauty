@@ -195,7 +195,7 @@ app.post('/perfil/agregarPerfil', (req, res) => {
 });
 
 // Ruta para actualizar los datos de un perfil
-app.put('/perfil/actualizarPerfil/:id', (req, res) => {
+app.put('/perfil/actualizarPerfil/:id', async (req, res) => {
     const { id } = req.params;
     const { Tipo_Perfil } = req.body;
     const query = 'UPDATE perfil SET Tipo_Perfil = $1 WHERE ID_Perfil = $2';

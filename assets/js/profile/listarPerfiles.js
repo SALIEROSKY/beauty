@@ -36,9 +36,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${profile.ID_Perfil}</td>
                 <td>${profile.Tipo_Perfil}</td>
                 <td>
-    <button class="btn btn-primary btn-sm" onclick="editarPerfil(${profile.ID_Perfil})">
-        <i class="fas fa-edit"></i> Editar
-    </button>
     <button class="btn btn-danger btn-sm" onclick="eliminarPerfil(${profile.ID_Perfil})">
         <i class="fas fa-trash-alt"></i> Eliminar
     </button>

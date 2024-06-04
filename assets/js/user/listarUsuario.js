@@ -34,9 +34,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${usuario.CorreoElectronico}</td>
                 <td>${usuario.ID_Perfil}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm" onclick="editarUsuario(${usuario.ID_Usuario})">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
                     <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${usuario.ID_Usuario})">
                         <i class="fas fa-trash-alt"></i> Eliminar
                     </button>
