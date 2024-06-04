@@ -181,7 +181,6 @@ app.get('/perfil/consultarPerfil', (req, res) => {
     });
 });
 
-
 // Ruta para agregar un nuevo perfil
 app.post('/perfil/agregarPerfil', (req, res) => {
     const { Tipo_Perfil } = req.body;
